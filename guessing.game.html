@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>number guessing game</title>
+<style>
+    body {
+        background-color: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+    }
+</style>
+</head>
+<body>
+     <h1>Number Guessing Game</h1>
+    <p>Welcome to the Number Guessing Game! Try to guess the number between 1 and 100. You have 10 attempts to guess the correct number. Good luck!</p> 
+    <p>To play the game, simply enter your guess in the input field and click the "Submit" button. The game will provide feedback on whether your guess is too low, too high, or correct. If you guess the number correctly within 10 attempts, you win! If you run out of attempts, the game will reveal the correct number. Have fun playing!</p>
+    <input type="number" id="guessInput" placeholder="Enter your guess">
+    <button id="submitGuess">Submit</button>
+    <button id="resetGame">Reset Game</button>
+    <p id="feedback"></p>
+    <p id="attempts"></p>
+    <script>
+        const submitGuessButton = document.getElementById('submitGuess');
+        const resetGameButton = document.getElementById('resetGame');
+        const feedbackElement = document.getElementById('feedback');
+        const attemptsElement = document.getElementById('attempts');
+        const guessInput = document.getElementById('guessInput');
+
+        let secretNumber;
+        let remainingAttempts;
+
+        function startGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            remainingAttempts = 10;
+            feedbackElement.textContent = 'Enter your guess to begin.';
+            attemptsElement.textContent = `Attempts left: ${remainingAttempts}`;
+            guessInput.value = '';
+            guessInput.disabled = false;
+            submitGuessButton.disabled = false;
+        }
+
+        function endGame(message) {
+            feedbackElement.textContent = message;
+            guessInput.disabled = true;
+            submitGuessButton.disabled = true;
+        }
+
+        function checkGuess() {
+            const guess = Number(guessInput.value);
+
+            if (!guess || guess < 1 || guess > 100) {
+                feedbackElement.textContent = 'Please enter a valid number between 1 and 100.';
+                return;
+            }
+
+            remainingAttempts -= 1;
+            attemptsElement.textContent = `Attempts left: ${remainingAttempts}`;
+
+            if (guess === secretNumber) {
+                endGame(`Correct! The number was ${secretNumber}. You win!`);
+            } else if (remainingAttempts <= 0) {
+                endGame(`Game over. The correct number was ${secretNumber}. Try again!`);
+            } else if (guess < secretNumber) {
+                feedbackElement.textContent = 'Too low! Try a higher number.';
+            } else {
+                feedbackElement.textContent = 'Too high! Try a lower number.';
+            }
+        }
+
+        submitGuessButton.addEventListener('click', checkGuess);
+        resetGameButton.addEventListener('click', startGame);
+
+        startGame();
+    </script>
+</body>
+</html>
